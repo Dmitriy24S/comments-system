@@ -5,10 +5,11 @@ import { useAsyncFn } from '../hooks/useAsync'
 import CommentList from './CommentList'
 
 const Post = () => {
+  // v1
   // const post = useContext(PostContext)
   // const { post } = useContext(PostContext)
-  // v1
-  const { post, rootComments } = usePostContext() // v2
+  // v2
+  const { post, rootComments } = usePostContext()
   console.log('Post - post:', post)
   // {post: {…}} (2x post:?)
   // post:

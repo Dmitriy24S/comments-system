@@ -14,6 +14,7 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 const Comment = ({ comment }) => {
   const { getReplies } = usePostContext()
   const childComments = getReplies(comment.id)
+  const [areChildrenHidden, setAreChildrenHidden] = useState(true)
 
   return (
     <div className='comment-container'>
@@ -34,9 +35,29 @@ const Comment = ({ comment }) => {
         </div>
       </div>
       {childComments?.length > 0 && (
-        <div className='nested-comments'>
-          <CommentList comments={childComments} />
-        </div>
+        <>
+          <div
+            className={[
+              'nested-comments-stack',
+              areChildrenHidden ? 'hide' : 'show',
+            ].join(' ')}
+          >
+            <button
+              aria-label='hide replies'
+              className='collapse-line-button'
+              onClick={() => setAreChildrenHidden(true)}
+            />
+            <div className='nested-comments'>
+              <CommentList comments={childComments} />
+            </div>
+          </div>
+          <button
+            className={['button', 'mt-2', areChildrenHidden ? 'show' : 'hide'].join(' ')}
+            onClick={() => setAreChildrenHidden(false)}
+          >
+            Show replies
+          </button>
+        </>
       )}
     </div>
   )

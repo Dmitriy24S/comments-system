@@ -103,6 +103,9 @@ button:focus-visible {
 }
 
 /* Comments */
+.nested-comments-stack {
+  display: flex;
+}
 .nested-comments {
   padding-left: 0.5rem;
   flex-grow: 1;
@@ -113,6 +116,33 @@ button:focus-visible {
   display: flex;
   gap: 0.25rem;
   margin-top: 0.5rem;
+}
+
+/* Comment collapse line button */
+.collapse-line-button {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 15px;
+  margin-top: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transform: translateX(-50%);
+}
+.collapse-line-button:hover::before,
+.collapse-line-button:focus-visible::before {
+  background-color: hsl(235, 100%, 60%);
+}
+.collapse-line-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: hsl(235, 50%, 74%);
+  transition: background-color 100ms ease-in-out;
 }
 
 /* Button */
@@ -189,7 +219,6 @@ button:focus-visible {
 .mt-4 {
   margin-top: 1rem;
 }
-
 .hide {
   display: none;
 }

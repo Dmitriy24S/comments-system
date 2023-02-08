@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { FaEdit, FaHeart, FaReply, FaTrash } from 'react-icons/fa'
 import { usePostContext } from '../context/PostContext'
+import { useAsyncFn } from '../hooks/useAsync'
+import { postComment } from '../services/postComment'
+import CommentForm from './CommentForm'
 import CommentList from './CommentList'
 import IconButton from './IconButton'
 
@@ -12,9 +15,28 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 // dynamic undefined locale
 
 const Comment = ({ comment }) => {
-  const { getReplies } = usePostContext()
+  const { post, getReplies, refreshPost } = usePostContext()
   const childComments = getReplies(comment.id)
   const [areChildrenHidden, setAreChildrenHidden] = useState(true)
+  const [isReplying, setIsReplying] = useState(false)
+
+  function toggleReplying() {
+    setIsReplying((prev) => !prev)
+  }
+
+  // postComment = ({ postId, message, parentId }) => {
+  const { loading, error, execute: createCommentFn } = useAsyncFn(postComment) // get fn (createCommentFn) -> to pass for reply submit form
+
+  function handleCreateReply(message) {
+    // have parentId (passing comment id of comment to which replying) = create reply to comment
+    return createCommentFn({ postId: post.id, message, parentId: comment.id }).then(
+      (comment) => {
+        console.log('create reply', comment)
+        setIsReplying(false)
+        refreshPost()
+      }
+    )
+  }
 
   return (
     <div className='comment-container'>
@@ -29,11 +51,22 @@ const Comment = ({ comment }) => {
           <IconButton Icon={FaHeart} aria-label='Like'>
             2
           </IconButton>
-          <IconButton Icon={FaReply} aria-label='Reply' />
+          <IconButton
+            Icon={FaReply}
+            aria-label={isReplying ? 'Close Reply' : 'Reply'}
+            onClick={toggleReplying}
+          />
           <IconButton Icon={FaEdit} aria-label='Edit' />
           <IconButton Icon={FaTrash} aria-label='Delete' />
         </div>
       </div>
+      {isReplying && (
+        // <div className='mt-2'>
+        <div className='mt-2 ml-2'>
+          <CommentForm loading={loading} error={error} onSubmit={handleCreateReply} />
+        </div>
+      )}
+      {/* Comment replies */}
       {childComments?.length > 0 && (
         <>
           <div

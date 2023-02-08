@@ -22,10 +22,10 @@ const Post = () => {
   // title: "Post1"
   console.log('Post rootComments', rootComments)
 
-  const { loading, error, execute: createCommentFn } = useAsyncFn(postComment) // get fn -> to pass for comment submit form
+  const { loading, error, execute: createCommentFn } = useAsyncFn(postComment) // get fn (createCommentFn) -> to pass for comment submit form
 
   function handleCreateComment(message) {
-    // parentId null
+    // parentId null, not passing comment id as parentId = root comment, not replying to a comment
     return createCommentFn({ postId: post.id, message }).then((comment) => {
       console.log('create comment', comment)
       refreshPost()

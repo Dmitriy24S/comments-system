@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAsync } from '../hooks/useAsync'
-import { getPosts } from '../services/getPosts'
+import { getPosts } from '../services/postsApi'
 
 const PostList = () => {
   // const [posts, setPosts] = useState([])

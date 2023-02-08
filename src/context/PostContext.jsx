@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAsync } from '../hooks/useAsync'
-import { getPost } from '../services/getPosts'
+import { getPost } from '../services/postsApi'
 
 // v1
 export const PostContext = React.createContext()

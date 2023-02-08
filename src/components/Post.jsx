@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { PostContext, usePostContext } from '../context/PostContext'
 import { useAsyncFn } from '../hooks/useAsync'
-import { postComment } from '../services/postComment'
+import { postComment } from '../services/commentApi'
 import CommentForm from './CommentForm'
 import CommentList from './CommentList'
 

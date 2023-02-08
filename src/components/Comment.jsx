@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaEdit, FaHeart, FaReply, FaTrash } from 'react-icons/fa'
 import { usePostContext } from '../context/PostContext'
 import { useAsyncFn } from '../hooks/useAsync'
-import { postComment } from '../services/postComment'
+import { postComment, updateComment } from '../services/commentApi'
 import CommentForm from './CommentForm'
 import CommentList from './CommentList'
 import IconButton from './IconButton'
@@ -19,12 +19,18 @@ const Comment = ({ comment }) => {
   const childComments = getReplies(comment.id)
   const [areChildrenHidden, setAreChildrenHidden] = useState(true)
   const [isReplying, setIsReplying] = useState(false)
+  const [isEditingComment, setIsEditingComment] = useState(false)
 
   function toggleReplying() {
     setIsReplying((prev) => !prev)
   }
 
-  // postComment = ({ postId, message, parentId }) => {
+  function toggleEditing() {
+    setIsEditingComment((prev) => !prev)
+  }
+
+  // Reply to comment:
+  // createCommentFn = postComment = ({ postId, message, parentId }) => {
   const { loading, error, execute: createCommentFn } = useAsyncFn(postComment) // get fn (createCommentFn) -> to pass for reply submit form
 
   function handleCreateReply(message) {
@@ -38,6 +44,27 @@ const Comment = ({ comment }) => {
     )
   }
 
+  // Update comment:
+  const updateCommentFn = useAsyncFn(updateComment)
+  // console.log('updateCommentFn', updateCommentFn)
+  // error: undefined
+  // execute: async (...params) => {…}
+  // loading: false
+  // value: undefined
+
+  // TODO: refactor?
+  // updateComment.execute = updateComment = ({ postId, message, commentId }) => {
+  // const handleUpdateComment = () => {
+  const handleUpdateComment = (newMessageValue) => {
+    return updateCommentFn
+      .execute({ postId: post.id, message: newMessageValue, commentId: comment.id })
+      .then((comment) => {
+        console.log('update comment', comment)
+        setIsEditingComment(false)
+        refreshPost()
+      })
+  }
+
   return (
     <div className='comment-container'>
       <div key={comment.id} className='comment'>
@@ -46,7 +73,19 @@ const Comment = ({ comment }) => {
           {/* <p>{comment.createdAt}</p> */}
           <p>{dateFormatter.format(Date.parse(comment.createdAt))}</p>
         </div>
-        <p>{comment.message}</p>
+        {isEditingComment ? (
+          <div className=''>
+            <CommentForm
+              autoFocus
+              initialValue={comment.message}
+              loading={updateCommentFn.loading}
+              error={updateCommentFn.error}
+              onSubmit={handleUpdateComment}
+            />
+          </div>
+        ) : (
+          <p>{comment.message}</p>
+        )}
         <div className='comment-actions'>
           <IconButton Icon={FaHeart} aria-label='Like'>
             2
@@ -56,7 +95,12 @@ const Comment = ({ comment }) => {
             aria-label={isReplying ? 'Close Reply' : 'Reply'}
             onClick={toggleReplying}
           />
-          <IconButton Icon={FaEdit} aria-label='Edit' />
+          <IconButton
+            Icon={FaEdit}
+            aria-label={isEditingComment ? 'Close Edit' : 'Edit'}
+            title={isEditingComment ? 'Close Edit' : 'Edit'}
+            onClick={toggleEditing}
+          />
           <IconButton Icon={FaTrash} aria-label='Delete' />
         </div>
       </div>

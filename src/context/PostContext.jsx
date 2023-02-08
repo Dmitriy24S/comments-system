@@ -14,7 +14,22 @@ export function PostProvider({ children }) {
   const { id } = useParams()
   // console.log('PostProvider, id:', id) // PostProvider, id: 90c83e3a-1d92-4dd0-9812-f5e7209532fc
 
-  const { loading, error, value: post } = useAsync(() => getPost(id), [id])
+  const [refetchPost, setRefetchPost] = useState(false)
+
+  function refreshPost() {
+    setRefetchPost(true)
+  }
+
+  function resetRefreshPostState() {
+    setRefetchPost(false)
+  }
+
+  // const { loading, error, value: post } = useAsync(() => getPost(id), [id])
+  const {
+    loading,
+    error,
+    value: post,
+  } = useAsync(() => getPost(id), resetRefreshPostState, [id, refetchPost]) // rerun when post id changes (open post page) / when update refetchPost status (after submit comment post)
 
   console.log('PostProvider, getPost -> post:', post)
   // body:
@@ -60,6 +75,7 @@ export function PostProvider({ children }) {
         },
         rootComments: commentsByParentId[null],
         getReplies,
+        refreshPost,
       }}
     >
       {loading && <h1>Loading</h1>}

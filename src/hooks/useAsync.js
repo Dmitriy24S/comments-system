@@ -3,10 +3,16 @@ import { useCallback, useEffect, useState } from 'react'
 // useQuery?
 
 // returns results
-export const useAsync = (func, dependencies = []) => {
+export const useAsync = (func, resetPostFunc, dependencies = []) => {
   const { execute, ...state } = useAsyncInternal(func, dependencies, true) // true = inital loading
 
+  // resetPostFunc() // ! infinite/too many rerenders
+
   useEffect(() => {
+    console.log('useEffect useAsync - execute()')
+    if (resetPostFunc) {
+      resetPostFunc() // ! ? ok performance?
+    }
     execute()
   }, [execute])
   // everytime our dependencies change -> 'execute' func. changes -> then useEffect reruns also

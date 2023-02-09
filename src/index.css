@@ -184,6 +184,9 @@ button:focus-visible {
 .icon-button:focus-visible {
   --color: hsl(var(--hue), 100%, 74%);
 }
+.icon-button--active {
+  --color: hsl(var(--hue), 100%, 64%);
+}
 
 /* Comment form */
 .comment-form {

@@ -92,12 +92,14 @@ const Comment = ({ comment }) => {
           </IconButton>
           <IconButton
             Icon={FaReply}
+            isActive={isReplying}
             aria-label={isReplying ? 'Close Reply' : 'Reply'}
             title={isReplying ? 'Close Reply' : 'Reply'}
             onClick={toggleReplying}
           />
           <IconButton
             Icon={FaEdit}
+            isActive={isEditingComment}
             aria-label={isEditingComment ? 'Close Edit' : 'Edit'}
             title={isEditingComment ? 'Close Edit' : 'Edit'}
             onClick={toggleEditing}

@@ -107,7 +107,12 @@ const Comment = ({ comment }) => {
       {isReplying && (
         // <div className='mt-2'>
         <div className='mt-2 ml-2'>
-          <CommentForm loading={loading} error={error} onSubmit={handleCreateReply} />
+          <CommentForm
+            autoFocus
+            loading={loading}
+            error={error}
+            onSubmit={handleCreateReply}
+          />
         </div>
       )}
       {/* Comment replies */}

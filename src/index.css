@@ -175,17 +175,20 @@ button:focus-visible {
   padding: 0.25em;
   display: flex;
   align-items: center;
+  transition: background-color 50ms ease-out;
 }
 .icon-button span {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
 }
-.icon-button:hover,
-.icon-button:focus-visible {
-  --color: hsl(var(--hue), 100%, 74%);
+.icon-button:not(.icon-button--active):hover,
+.icon-button:not(.icon-button--active):focus-visible {
+  /* --color: hsl(var(--hue), 100%, 74%); */
+  background-color: hsla(0, 0%, 0%, 0.05);
 }
 .icon-button--active {
   --color: hsl(var(--hue), 100%, 64%);
+  background-color: hsla(0, 0%, 0%, 0.08);
 }
 
 /* Comment form */

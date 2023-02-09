@@ -93,6 +93,7 @@ const Comment = ({ comment }) => {
           <IconButton
             Icon={FaReply}
             aria-label={isReplying ? 'Close Reply' : 'Reply'}
+            title={isReplying ? 'Close Reply' : 'Reply'}
             onClick={toggleReplying}
           />
           <IconButton

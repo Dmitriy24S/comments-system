@@ -101,6 +101,16 @@ button:focus-visible {
   justify-content: space-between;
   /* margin-bottom: 1rem; */
 }
+.comment-owner {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.6;
+  /* color: hsl(235, 100%, 30%); */
+  /* color: #646cff; */
+  /* color: hsl(237, 100%, 70%); */
+  /* color: hsl(235, 100%, 67%); */
+  color: hsl(235, 100%, 47%);
+}
 
 /* Comments */
 .nested-comments-stack {

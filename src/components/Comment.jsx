@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaEdit, FaHeart, FaRegHeart, FaReply, FaTrash } from 'react-icons/fa'
 import { usePostContext } from '../context/PostContext'
 import { useAsyncFn } from '../hooks/useAsync'
+import { useUser } from '../hooks/useUser'
 import {
   deleteComment,
   postComment,
@@ -25,6 +26,9 @@ const Comment = ({ comment }) => {
   const [areChildrenHidden, setAreChildrenHidden] = useState(true)
   const [isReplying, setIsReplying] = useState(false)
   const [isEditingComment, setIsEditingComment] = useState(false)
+  const currentUser = useUser()
+  console.log('currentUser', currentUser)
+  // {id: 'a22cafa5-5a53-4ddf-ab0b-1cf5decdf48c'}
 
   function toggleReplying() {
     setIsReplying((prev) => !prev)
@@ -107,7 +111,12 @@ const Comment = ({ comment }) => {
     <div className='comment-container'>
       <div key={comment.id} className='comment'>
         <div className='comment-header'>
-          <h4>{comment.user.name}</h4>
+          <h4>
+            {comment.user.name}
+            {currentUser.id === comment.user.id && (
+              <span className='comment-owner'> (you)</span>
+            )}
+          </h4>
           {/* <p>{comment.createdAt}</p> */}
           <p>{dateFormatter.format(Date.parse(comment.createdAt))}</p>
         </div>
@@ -141,20 +150,24 @@ const Comment = ({ comment }) => {
             title={isReplying ? 'Close Reply' : 'Reply'}
             onClick={toggleReplying}
           />
-          <IconButton
-            Icon={FaEdit}
-            isActive={isEditingComment}
-            aria-label={isEditingComment ? 'Close Edit' : 'Edit'}
-            title={isEditingComment ? 'Close Edit' : 'Edit'}
-            onClick={toggleEditing}
-          />
-          <IconButton
-            Icon={FaTrash}
-            aria-label='Delete'
-            title='Delete'
-            onClick={handleDeleteComment}
-            disabled={deleteCommentFn.loading}
-          />
+          {currentUser.id === comment.user.id && (
+            <>
+              <IconButton
+                Icon={FaEdit}
+                isActive={isEditingComment}
+                aria-label={isEditingComment ? 'Close Edit' : 'Edit'}
+                title={isEditingComment ? 'Close Edit' : 'Edit'}
+                onClick={toggleEditing}
+              />
+              <IconButton
+                Icon={FaTrash}
+                aria-label='Delete'
+                title='Delete'
+                onClick={handleDeleteComment}
+                disabled={deleteCommentFn.loading}
+              />
+            </>
+          )}
         </div>
       </div>
       {isReplying && (

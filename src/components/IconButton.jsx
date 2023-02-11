@@ -4,7 +4,11 @@ const IconButton = ({ Icon, isActive, color, children, ...props }) => {
   return (
     <button
       {...props}
-      className={['icon-button', isActive ? 'icon-button--active' : ''].join(' ')}
+      className={[
+        'icon-button',
+        isActive ? 'icon-button--active' : '',
+        color ? color : '',
+      ].join(' ')}
     >
       <span>
         {/* style? children != null ? mr-1 : '' */}

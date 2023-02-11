@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
-import { FaEdit, FaHeart, FaReply, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaHeart, FaRegHeart, FaReply, FaTrash } from 'react-icons/fa'
 import { usePostContext } from '../context/PostContext'
 import { useAsyncFn } from '../hooks/useAsync'
-import { deleteComment, postComment, updateComment } from '../services/commentApi'
+import {
+  deleteComment,
+  postComment,
+  toggleCommentLike,
+  updateComment,
+} from '../services/commentApi'
 import CommentForm from './CommentForm'
 import CommentList from './CommentList'
 import IconButton from './IconButton'
@@ -83,6 +88,21 @@ const Comment = ({ comment }) => {
     }
   }
 
+  // Toggle comment like
+  const toggleCommentLikeFn = useAsyncFn(toggleCommentLike)
+  // makeRequest(`/posts/${postId}/comments/${commentId}/toggleLike`
+  const handleToggleCommentLike = () => {
+    return toggleCommentLikeFn
+      .execute({
+        postId: post.id,
+        commentId: comment.id,
+      })
+      .then((comment) => {
+        console.log('like comment', comment)
+        refreshPost()
+      })
+  }
+
   return (
     <div className='comment-container'>
       <div key={comment.id} className='comment'>
@@ -103,8 +123,16 @@ const Comment = ({ comment }) => {
           <p>{comment.message}</p>
         )}
         <div className='comment-actions'>
-          <IconButton Icon={FaHeart} aria-label='Like'>
-            2
+          <IconButton
+            Icon={comment.likedByMe ? FaHeart : FaRegHeart}
+            isActive={comment.likedByMe}
+            aria-label={comment.likedByMe ? 'Unlike' : 'Like'}
+            title={comment.likedByMe ? 'Unlike' : 'Like'}
+            onClick={handleToggleCommentLike}
+            color={comment.likedByMe ? 'red' : ''}
+          >
+            {/* 2 */}
+            {comment.likeCount}
           </IconButton>
           <IconButton
             Icon={FaReply}

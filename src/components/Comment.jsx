@@ -179,6 +179,7 @@ const Comment = ({ comment }) => {
           >
             <button
               aria-label='hide replies'
+              title='Hide replies'
               className='collapse-line-button'
               onClick={() => setAreChildrenHidden(true)}
             />

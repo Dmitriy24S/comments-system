@@ -13,3 +13,9 @@ export const updateComment = ({ postId, message, commentId }) => {
     data: { message },
   })
 }
+
+export const deleteComment = ({ postId, commentId }) => {
+  return makeRequest(`/posts/${postId}/comments/${commentId}`, {
+    method: 'DELETE',
+  })
+}

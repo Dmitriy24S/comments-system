@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaEdit, FaHeart, FaReply, FaTrash } from 'react-icons/fa'
 import { usePostContext } from '../context/PostContext'
 import { useAsyncFn } from '../hooks/useAsync'
-import { postComment, updateComment } from '../services/commentApi'
+import { deleteComment, postComment, updateComment } from '../services/commentApi'
 import CommentForm from './CommentForm'
 import CommentList from './CommentList'
 import IconButton from './IconButton'
@@ -65,6 +65,24 @@ const Comment = ({ comment }) => {
       })
   }
 
+  // Delete comment
+  const deleteCommentFn = useAsyncFn(deleteComment)
+  // deleteCommentFn.execute = deleteComment = ({ postId, commentId }) => {
+  // makeRequest(`/posts/${postId}/comments/${commentId}`
+  const handleDeleteComment = () => {
+    if (window.confirm('Do you want to delete this comment')) {
+      return deleteCommentFn
+        .execute({
+          postId: post.id,
+          commentId: comment.id,
+        })
+        .then((comment) => {
+          console.log('delete comment', comment)
+          refreshPost()
+        })
+    }
+  }
+
   return (
     <div className='comment-container'>
       <div key={comment.id} className='comment'>
@@ -74,15 +92,13 @@ const Comment = ({ comment }) => {
           <p>{dateFormatter.format(Date.parse(comment.createdAt))}</p>
         </div>
         {isEditingComment ? (
-          <div className=''>
-            <CommentForm
-              autoFocus
-              initialValue={comment.message}
-              loading={updateCommentFn.loading}
-              error={updateCommentFn.error}
-              onSubmit={handleUpdateComment}
-            />
-          </div>
+          <CommentForm
+            autoFocus
+            initialValue={comment.message}
+            loading={updateCommentFn.loading}
+            error={updateCommentFn.error}
+            onSubmit={handleUpdateComment}
+          />
         ) : (
           <p>{comment.message}</p>
         )}
@@ -104,7 +120,13 @@ const Comment = ({ comment }) => {
             title={isEditingComment ? 'Close Edit' : 'Edit'}
             onClick={toggleEditing}
           />
-          <IconButton Icon={FaTrash} aria-label='Delete' />
+          <IconButton
+            Icon={FaTrash}
+            aria-label='Delete'
+            title='Delete'
+            onClick={handleDeleteComment}
+            disabled={deleteCommentFn.loading}
+          />
         </div>
       </div>
       {isReplying && (

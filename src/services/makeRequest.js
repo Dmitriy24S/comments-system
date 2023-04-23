@@ -8,6 +8,9 @@ const api = axios.create({
   withCredentials: true,
   // send/use cookies with request?
   // include user credentials (e.g., cookies, authorization headers, etc.) with cross-site requests.
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
 
 // export const makeRequest = (url, options) => {

@@ -26,7 +26,10 @@ const Comment = ({ comment }) => {
   const [areChildrenHidden, setAreChildrenHidden] = useState(true)
   const [isReplying, setIsReplying] = useState(false)
   const [isEditingComment, setIsEditingComment] = useState(false)
-  const currentUser = useUser()
+  const currentUser = useUser() || {
+    id: 'a22cafa5-5a53-4ddf-ab0b-1cf5decdf48c',
+    type: 'backup',
+  }
   console.log('currentUser', currentUser)
   // {id: 'a22cafa5-5a53-4ddf-ab0b-1cf5decdf48c'}
 
